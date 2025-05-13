@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exclusive Giveaway</title>
+    <style>
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #e0e0e0;
+            --dark-gray: #333333;
+            --light-gray: #f5f5f5;
+            --success-green: #4CAF50;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--black);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .background-graphics {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .graphic {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.1));
+            opacity: 0.15;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .trophy {
+            width: 120px;
+            height: 120px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23FF6B6B" d="M223.75 130.75L154.62 15.54A31.997 31.997 0 0 0 127.18 0H16.03C3.08 0-4.5 14.57 2.92 25.18l122.6 175.44 98.23-69.87zM256 160c-97.25 0-176 78.75-176 176s78.75 176 176 176 176-78.75 176-176-78.75-176-176-176zm92.52 157.26l-37.93 36.96 8.97 52.22c1.6 9.36-8.26 16.51-16.65 12.09L256 393.88l-46.9 24.65c-8.4 4.45-18.25-2.74-16.65-12.09l8.97-52.22-37.93-36.96c-6.82-6.64-3.05-18.23 6.35-19.59l52.43-7.64 23.43-47.52c2.11-4.28 6.19-6.39 10.28-6.39 4.11 0 8.22 2.14 10.33 6.39l23.43 47.52 52.43 7.64c9.4 1.36 13.17 12.95 6.35 19.59zM495.97 0H384.82c-9.19 0-17.84 5.54-21.43 14.46l-69.13 115.21 98.23 69.87L509.08 25.18C516.5 14.57 508.92 0 495.97 0z"/></svg>');
+            top: 15%;
+            left: 10%;
+        }
+
+        .gift {
+            width: 100px;
+            height: 100px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%234ECDC4" d="M32 448c0 17.7 14.3 32 32 32h160V320H32v128zm256 32h160c17.7 0 32-14.3 32-32V320H288v160zm192-320h-42.1c6.2-12.1 10.1-25.5 10.1-40 0-48.5-39.5-88-88-88-41.6 0-68.5 21.3-103 68.3-34.5-47-61.4-68.3-103-68.3-48.5 0-88 39.5-88 88 0 14.5 3.8 27.9 10.1 40H32c-17.7 0-32 14.3-32 32v80c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-80c0-17.7-14.3-32-32-32zm-326.1 0c-22.1 0-40-17.9-40-40s17.9-40 40-40c19.9 0 34.6 3.3 86.1 80h-86.1zm206.1 0h-86.1c51.4-76.5 65.7-80 86.1-80 22.1 0 40 17.9 40 40s-17.9 40-40 40z"/></svg>');
+            top: 70%;
+            left: 15%;
+            animation-delay: 1s;
+        }
+
+        .medal {
+            width: 90px;
+            height: 90px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23FFE66D" d="M223.75 130.75L154.62 15.54A31.997 31.997 0 0 0 127.18 0H16.03C3.08 0-4.5 14.57 2.92 25.18l122.6 175.44 98.23-69.87zM256 160c-97.25 0-176 78.75-176 176s78.75 176 176 176 176-78.75 176-176-78.75-176-176-176zm92.52 157.26l-37.93 36.96 8.97 52.22c1.6 9.36-8.26 16.51-16.65 12.09L256 393.88l-46.9 24.65c-8.4 4.45-18.25-2.74-16.65-12.09l8.97-52.22-37.93-36.96c-6.82-6.64-3.05-18.23 6.35-19.59l52.43-7.64 23.43-47.52c2.11-4.28 6.19-6.39 10.28-6.39 4.11 0 8.22 2.14 10.33 6.39l23.43 47.52 52.43 7.64c9.4 1.36 13.17 12.95 6.35 19.59zM495.97 0H384.82c-9.19 0-17.84 5.54-21.43 14.46l-69.13 115.21 98.23 69.87L509.08 25.18C516.5 14.57 508.92 0 495.97 0z"/></svg>');
+            top: 30%;
+            right: 10%;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 95%;
+            max-width: 500px;
+            padding: 1.5rem;
+            margin: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--gray);
+            position: relative;
+            z-index: 2;
+            border-radius: 8px;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%);
+            border-radius: 8px 8px 0 0;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin: 0.5rem 0 1.2rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 0.8rem;
+            color: var(--black);
+        }
+
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background-color: var(--black);
+        }
+
+        .instructions-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--black);
+            border: none;
+            color: white;
+            font-size: 0.75rem;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 3;
+            transition: all 0.2s ease;
+        }
+
+        .instructions-btn:hover {
+            background: var(--dark-gray);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            border-top: 4px solid var(--black);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--black);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--dark-gray);
+        }
+
+        .required:after {
+            content: " *";
+            color: #ff6b6b;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--gray);
+            background-color: var(--white);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--black);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--black);
+            color: var(--white);
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--dark-gray);
+        }
+
+        #message {
+            margin-top: 1.2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            min-height: 20px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        /* Confetti Styles */
+        .confetti {
+            position: absolute;
+            opacity: 0;
+            z-index: 15;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+        
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 14;
+        }
+        
+        /* Success Popup */
+        .success-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 20;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .success-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            position: relative;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-top: 5px solid var(--success-green);
+        }
+        
+        .success-content h2 {
+            color: var(--success-green);
+            margin-top: 0;
+        }
+        
+        .success-content p {
+            margin-bottom: 1.5rem;
+            color: var(--dark-gray);
+        }
+        
+        .success-content button {
+            background-color: var(--success-green);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .success-content button:hover {
+            background-color: #3e8e41;
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Large Celebration Graphics */
+        .celebration-graphic {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 16;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .celebration-trophy {
+            width: 150px;
+            height: 150px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23FFD700" d="M223.75 130.75L154.62 15.54A31.997 31.997 0 0 0 127.18 0H16.03C3.08 0-4.5 14.57 2.92 25.18l122.6 175.44 98.23-69.87zM256 160c-97.25 0-176 78.75-176 176s78.75 176 176 176 176-78.75 176-176-78.75-176-176-176zm92.52 157.26l-37.93 36.96 8.97 52.22c1.6 9.36-8.26 16.51-16.65 12.09L256 393.88l-46.9 24.65c-8.4 4.45-18.25-2.74-16.65-12.09l8.97-52.22-37.93-36.96c-6.82-6.64-3.05-18.23 6.35-19.59l52.43-7.64 23.43-47.52c2.11-4.28 6.19-6.39 10.28-6.39 4.11 0 8.22 2.14 10.33 6.39l23.43 47.52 52.43 7.64c9.4 1.36 13.17 12.95 6.35 19.59zM495.97 0H384.82c-9.19 0-17.84 5.54-21.43 14.46l-69.13 115.21 98.23 69.87L509.08 25.18C516.5 14.57 508.92 0 495.97 0z"/></svg>');
+            top: 20%;
+            left: 10%;
+        }
+        
+        .celebration-gift {
+            width: 120px;
+            height: 120px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23FF6B6B" d="M32 448c0 17.7 14.3 32 32 32h160V320H32v128zm256 32h160c17.7 0 32-14.3 32-32V320H288v160zm192-320h-42.1c6.2-12.1 10.1-25.5 10.1-40 0-48.5-39.5-88-88-88-41.6 0-68.5 21.3-103 68.3-34.5-47-61.4-68.3-103-68.3-48.5 0-88 39.5-88 88 0 14.5 3.8 27.9 10.1 40H32c-17.7 0-32 14.3-32 32v80c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-80c0-17.7-14.3-32-32-32zm-326.1 0c-22.1 0-40-17.9-40-40s17.9-40 40-40c19.9 0 34.6 3.3 86.1 80h-86.1zm206.1 0h-86.1c51.4-76.5 65.7-80 86.1-80 22.1 0 40 17.9 40 40s-17.9 40-40 40z"/></svg>');
+            bottom: 20%;
+            right: 10%;
+            animation-delay: 0.5s;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.2rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .graphic {
+                width: 70px;
+                height: 70px;
+                opacity: 0.1;
+            }
+            
+            .celebration-trophy {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .celebration-gift {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-graphics">
+        <div class="graphic trophy"></div>
+        <div class="graphic gift"></div>
+        <div class="graphic medal"></div>
+    </div>
+    
+    <div class="container">
+        <button class="instructions-btn" id="instructionsBtn">INSTRUCTIONS</button>
+        <h1>EXCLUSIVE GIVEAWAY</h1>
+        <p style="text-align: center; margin-bottom: 1.5rem; color: var(--dark-gray);">Enter for a chance to win our premium prizes. Winners will be notified by email.</p>
+        
+        <form id="giveawayForm">
+            <!-- Personal Information -->
+            <div class="form-group">
+                <label for="name" class="required">FULL NAME</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email" class="required">EMAIL ADDRESS</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone1" class="required">PHONE NUMBER</label>
+                <input type="tel" id="phone1" name="phone1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone2">ALTERNATE PHONE NUMBER</label>
+                <input type="tel" id="phone2" name="phone2">
+            </div>
+            
+            <div class="form-group">
+                <label for="address" class="required">ADDRESS</label>
+                <textarea id="address" name="address" rows="2" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="landmark">LANDMARK</label>
+                <input type="text" id="landmark" name="landmark">
+            </div>
+            
+            <div class="form-group">
+                <label for="district" class="required">DISTRICT</label>
+                <input type="text" id="district" name="district" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="age">AGE</label>
+                <input type="number" id="age" name="age" min="13" max="120">
+            </div>
+            
+            <div class="form-group">
+                <label for="gender">GENDER</label>
+                <select id="gender" name="gender">
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                    <option value="prefer-not-to-say">Prefer not to say</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="instagram">INSTAGRAM ID</label>
+                <input type="text" id="instagram" name="instagram" placeholder="@username">
+            </div>
+            
+            <!-- Terms and Conditions -->
+<div class="form-group" style="margin-bottom: 1rem;">
+<div style="display: flex; align-items: center; gap: 0; margin-top: 6px !important;">
+        <input type="checkbox" id="readInstructions" name="readInstructions" required 
+               style="margin: 0 !important; width: 14px !important; height: 14px !important;">
+        <label for="readInstructions" style="margin-left: 6px !important; display: inline !important;" class="required">
+            I have read the giveaway instructions
+        </label>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0;">
+        <input type="checkbox" id="terms" name="terms" required 
+               style="margin: 0 !important; width: 14px !important; height: 14px !important;">
+        <label for="terms" style="margin-left: 6px !important; display: inline !important;" class="required">
+            I agree to the terms and conditions
+        </label>
+    </div>
+</div>
+            
+            <button type="submit">SUBMIT ENTRY</button>
+        </form>
+        
+        <div id="message"></div>
+    </div>
+
+    <!-- Success Popup -->
+    <div class="success-popup" id="successPopup">
+        <div class="success-content">
+            <h2>Success!</h2>
+            <p>Your entry has been submitted successfully. Good luck!</p>
+            <button id="closeSuccessPopup">OK</button>
+        </div>
+        <div class="celebration-graphic celebration-trophy"></div>
+        <div class="celebration-graphic celebration-gift"></div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div class="modal" id="instructionsModal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeModal">&times;</button>
+            <h2 style="margin-top: 0; text-align: center;">GIVEAWAY INSTRUCTIONS</h2>
+            <div style="height: 2px; background: var(--light-gray); margin: 0.8rem 0;"></div>
+            <ol style="line-height: 1.6; padding-left: 1.2rem;">
+                <li style="margin-bottom: 0.8rem;">Follow XPanova_shopping Page</li>
+                <li style="margin-bottom: 0.8rem;">Fill out all required fields in the entry form.</li>
+                <li style="margin-bottom: 0.8rem;">Provide correct contact information for winner notification.</li>
+                <li style="margin-bottom: 0.8rem;">Click "SUBMIT ENTRY" to complete your registration.</li>
+                <li style="margin-bottom: 0.8rem;">Only one entry per person is allowed.</li>
+                <li style="margin-bottom: 0.8rem;">This page will be closed on <strong>may 30th</strong></li>
+                <li style="margin-bottom: 0.8rem;">The giveaway winner will be selected and announced on <strong>June 1st Week</strong> in this page.</li>
+                <li style="margin-bottom: 0.8rem;">Winners will be selected randomly and notified via instagram/email/phone.</li>
+                <li style="margin-bottom: 0.8rem;">Prizes must be claimed within 14 days of notification.</li>
+                <li style="margin-bottom: 0.8rem;">No purchase necessary to enter or win.</li>
+            </ol>
+            <div style="background-color: var(--light-gray); padding: 1rem; border-radius: 4px; margin-top: 1.5rem;">
+                <p style="font-size: 0.85rem; margin: 0; color: var(--dark-gray); text-align: center;">
+                    By entering this giveaway, you agree to our terms and conditions.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Replace with your Google Apps Script URL
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbwp0TJfAlXrJ-guVxyUgD7XFCeKVNHIlSlIgqm34WJ8ErInW22S7kJIrH-_k8iASLv_/exec';
+        
+        // Modal functionality
+        const modal = document.getElementById('instructionsModal');
+        const btn = document.getElementById('instructionsBtn');
+        const span = document.getElementById('closeModal');
+
+        // Success popup elements
+        const successPopup = document.getElementById('successPopup');
+        const closeSuccessBtn = document.getElementById('closeSuccessPopup');
+
+        btn.onclick = function() {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        span.onclick = function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        closeSuccessBtn.onclick = function() {
+            successPopup.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            if (event.target == successPopup) {
+                successPopup.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Form submission using JSONP
+        document.getElementById('giveawayForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = document.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'SUBMITTING...';
+            submitBtn.disabled = true;
+            
+            // Collect form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone1: document.getElementById('phone1').value,
+                phone2: document.getElementById('phone2').value,
+                address: document.getElementById('address').value,
+                landmark: document.getElementById('landmark').value,
+                district: document.getElementById('district').value,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                instagram: document.getElementById('instagram').value,
+                terms: document.getElementById('terms').checked ? 'Yes' : 'No'
+            };
+            
+            // Create unique callback name
+            const callbackName = 'jsonp_callback_' + Date.now();
+            
+            // Define the callback function
+            window[callbackName] = function(response) {
+                // Clean up
+                document.getElementById('jsonpScript')?.remove();
+                delete window[callbackName];
+                
+                // Process response
+                if (response.result === 'success') {
+                    document.getElementById('message').innerHTML = 
+                        '<p style="color: var(--black); font-weight: 500;">Thank you for your entry! Good luck!</p>';
+                    document.getElementById('giveawayForm').reset();
+                    createConfetti();
+                    showSuccessPopup();
+                } else {
+                    document.getElementById('message').innerHTML = 
+                        '<p style="color: var(--dark-gray);">Error: ' + (response.error || 'Submission failed') + '</p>';
+                }
+                
+                submitBtn.textContent = 'SUBMIT ENTRY';
+                submitBtn.disabled = false;
+            };
+            
+            // Build URL with parameters
+            const params = new URLSearchParams();
+            params.append('callback', callbackName);
+            for (const [key, value] of Object.entries(formData)) {
+                params.append(key, value);
+            }
+            
+            // Create and append script tag
+            const script = document.createElement('script');
+            script.id = 'jsonpScript';
+            script.src = `${scriptUrl}?${params.toString()}`;
+            document.body.appendChild(script);
+            
+            // Timeout fallback
+            setTimeout(() => {
+                if (submitBtn.disabled) {
+                    document.getElementById('message').innerHTML = 
+                        '<p style="color: var(--dark-gray);">Submission timed out. Please try again.</p>';
+                    submitBtn.textContent = 'SUBMIT ENTRY';
+                    submitBtn.disabled = false;
+                }
+            }, 10000);
+        });
+
+        function showSuccessPopup() {
+            document.body.style.overflow = 'hidden';
+            successPopup.style.display = 'flex';
+        }
+
+        function createConfetti() {
+            // Create a dedicated container for confetti
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti-container';
+            document.body.appendChild(confettiContainer);
+            
+            const colors = [
+                '#FF6B6B', '#4ECDC4', '#FFE66D', '#FF8E8E', '#88D8C0', '#FFD166',
+                '#A05195', '#F95D6A', '#D45087', '#FF7C43', '#2F4B7C', '#665191',
+                '#003F5C', '#58508D', '#BC5090', '#FF6361', '#FFA600', '#FFD700',
+                '#32CD32', '#9370DB', '#FF69B4', '#00BFFF'
+            ];
+            
+            const shapes = ['circle', 'rect', 'triangle', 'star'];
+            
+            // Create 250 pieces of confetti
+            for (let i = 0; i < 250; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // Random positioning
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = -30 + 'px';
+                
+                // Random color
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.backgroundColor = color;
+                
+                // Random size (larger sizes)
+                const size = Math.random() * 20 + 10; // 10-30px
+                confetti.style.width = size + 'px';
+                confetti.style.height = size + 'px';
+                
+                // Random shape
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                if (shape === 'circle') {
+                    confetti.style.borderRadius = '50%';
+                } else if (shape === 'triangle') {
+                    confetti.style.clipPath = 'polygon(50% 0%, 0% 100%, 100% 100%)';
+                    confetti.style.backgroundColor = 'transparent';
+                    confetti.style.borderLeft = `${size/2}px solid transparent`;
+                    confetti.style.borderRight = `${size/2}px solid transparent`;
+                    confetti.style.borderBottom = `${size}px solid ${color}`;
+                    confetti.style.width = '0';
+                    confetti.style.height = '0';
+                } else if (shape === 'star') {
+                    confetti.style.backgroundImage = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='${encodeURIComponent(color)}'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E")`;
+                    confetti.style.backgroundColor = 'transparent';
+                    confetti.style.backgroundSize = 'contain';
+                }
+                
+                confettiContainer.appendChild(confetti);
+                
+                // Random animation duration (10-15 seconds)
+                const animationDuration = Math.random() * 5 + 10;
+                
+                // More dramatic animation with rotation and horizontal movement
+                confetti.animate([
+                    { 
+                        transform: `translate(${Math.random() * 100 - 50}px, 0) rotate(0deg) scale(1)`, 
+                        opacity: 1 
+                    },
+                    { 
+                        transform: `translate(${Math.random() * 200 - 100}px, ${window.innerHeight + 100}px) rotate(${Math.random() * 1440}deg) scale(0)`, 
+                        opacity: 0 
+                    }
+                ], {
+                    duration: animationDuration * 1000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)',
+                    fill: 'forwards'
+                });
+            }
+            
+            // Add a success message animation
+            const message = document.getElementById('message');
+            message.animate([
+                { transform: 'scale(0.9)', opacity: 0 },
+                { transform: 'scale(1.05)', opacity: 1, offset: 0.3 },
+                { transform: 'scale(1)', opacity: 1 }
+            ], {
+                duration: 800,
+                easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+            });
+            
+            // Remove confetti container after 15 seconds
+            setTimeout(() => {
+                confettiContainer.remove();
+            }, 15000);
+        }
+    </script>
+</body>
+</html>
